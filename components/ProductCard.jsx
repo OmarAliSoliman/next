@@ -1,18 +1,19 @@
 import Link from 'next/link';
 import React from 'react'
+import { bublic_url } from './API';
 
-function ProductCard(props) {
-  const { link, img, title, data, slag } = props;
+function ProductCard({item}) {
+  
   return (
     <>
       <div className="slider_item">
-        <Link href={{ pathname: `/blogdetails/${link}`, query: { data: data, img: img, title: title, slag:slag } }} className="product_card">
+        <Link href={{ pathname: `/blogdetails/${item.id}`, query: { title: item.attributes?.Title } }} className="product_card">
           <div className="card_img">
             <div className="img_parent">
-              <img src={img} alt="" />
+              <img src={`${bublic_url}${item.attributes?.Images.data[0].attributes?.formats?.medium?.url}`} alt="" />
             </div>
             <div className="card_title">
-              <h5 className="text-f-3 text-w-500">{title}</h5>
+              <h5 className="text-f-3 text-w-500">{item.attributes?.Title}</h5>
             </div>
           </div>
         </Link>

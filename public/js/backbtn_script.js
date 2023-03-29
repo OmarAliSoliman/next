@@ -120,7 +120,7 @@ $(document).ready(function () {
 
 
 	$(window).on('load hashchange', function () {
-		// console.log(window.location.hash);
+		console.log(window.location.hash);
 		var topValue = 102;
 		if ($(window).width() <= 1600) {
 			topValue = 55;
