@@ -2,15 +2,15 @@ import Link from 'next/link';
 import React from 'react'
 import { bublic_url } from './API';
 
-function ProductCard({item}) {
-  
+function ProductCard({ item }) {
+
   return (
     <>
       <div className="slider_item">
         <Link href={{ pathname: `/blogdetails/${item.id}`, query: { title: item.attributes?.Title } }} className="product_card">
           <div className="card_img">
             <div className="img_parent">
-              <img src={`${bublic_url}${item.attributes?.Images.data[0].attributes?.formats?.medium?.url}`} alt="" />
+              <img src={`${bublic_url}${item.attributes?.card_image?.data?.attributes?.url}`} alt="" />
             </div>
             <div className="card_title">
               <h5 className="text-f-3 text-w-500">{item.attributes?.Title}</h5>

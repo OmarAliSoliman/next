@@ -1,7 +1,8 @@
 import React from 'react'
+import { bublic_url } from './API'
 import ContactForm from './ContactForm'
 
-function HomeContactUs() {
+function HomeContactUs({data}) {
   return (
     <>
       {/* <!-- contact us --> */}
@@ -11,7 +12,7 @@ function HomeContactUs() {
             <div className="col-sm-12 col-md-6 col-lg-6">
               <div className="card_img">
                 <div className="img_parent">
-                  <img src="/images/contactus.png" alt="" />
+                  <img src={`${bublic_url}${data.attributes?.contactus_image?.data?.attributes.url}`} alt="" />
                 </div>
               </div>
             </div>

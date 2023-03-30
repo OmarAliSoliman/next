@@ -1,6 +1,6 @@
 import React from 'react'
 
-function HomeAbout() {
+function HomeAbout({data}) {
   return (
     <>
       {/* <!-- about us section --> */}
@@ -12,18 +12,16 @@ function HomeAbout() {
           <div className="about_contetn">
             <div className="row">
               <div className="col-sm-12 col-md-12 col-lg-4">
-                <h5 className="text-w-700">Viola Outdoor is a leading provider of out-of-home advertising, offering brands
-                  dynamic and impactful
-                  communication solutions.</h5>
+                <h5 className="text-w-700">
+                  {data.attributes?.AboutUSLeftSide}
+                </h5>
               </div>
               <div className="col-sm-12 col-md-6 col-lg-1 d-none d-md-block"></div>
               <div className="col-sm-12 col-md-12  col-lg-7">
                 <p className="text-w-400">
-                  We ensure maximum exposure and a strategic reach, enabling brands to engage with their audience on the go.
+                {data.attributes?.AboutUsRightSide}
                 </p>
-                <p className="text-w-400">
-                  Whether creating awareness in a specific neighborhood, the entire city or across the busiest highways, we
-                  provide comprehensive exposure for our clients that delivers results and maximizes their ROI. </p>
+               
               </div>
             </div>
           </div>

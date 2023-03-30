@@ -1,16 +1,17 @@
 import React from 'react'
+import { bublic_url } from './API'
 
-function Header() {
+function Header({data}) {
   return (
     <>
       {/* <!-- header video --> */}
       <div className="section header_video">
         <div className="video_behind">
-          <video src="/video/newvideo.mp4" autoPlay playsInline muted loop></video>
+          <video src={`${bublic_url}${data.attributes?.HomePageVideo.data.attributes.url}`} autoPlay playsInline muted loop></video>
         </div>
 
         <div className="video_wrapper">
-          <video src="/video/newvideo.mp4" autoPlay playsInline muted loop></video>
+          <video src={`${bublic_url}${data.attributes?.HomePageVideo.data.attributes.url}`} autoPlay playsInline muted loop></video>
         </div>
 
         <div className="header_content">

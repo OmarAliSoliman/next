@@ -5,21 +5,24 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Scrollbar } from "react-scrollbars-custom";
 import { bublic_url, news_api } from "../../components/API";
 import BtnBack from "../../components/btnBack";
+import PageSkelton from "../../components/PageSkelton";
 
 
 function productDetails() {
 
   const [data, setData] = useState({})
-  const [id, setId] = useState();
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const title = router.query.title
-   
+  // type
+  const id = parseInt(router.query.id);
+
   useEffect(() => {
     document.title = title
-    const id = router.query.id
-    setId(id)
-
-    retreveData(id);
+    setLoading(true)
+    if (id) {
+      retreveData(id);
+    }
 
     const script = document.createElement('script');
     script.src = '/js/backbtn_script.js';
@@ -33,12 +36,16 @@ function productDetails() {
   }, [id, title])
 
 
-  const retreveData = async (id) =>{
-    await axios.get(`${news_api}/${id}?populate=*`).then((res)=>{
-      if(res.status == 200){
+  const retreveData = async (id) => {
+    await axios.get(`${news_api}/${id}?populate=*`).then((res) => {
+      if (res.status == 200) {
         setData(res.data.data);
         console.log(res.data.data);
       }
+    }).catch((er) => {
+      console.log(er)
+    }).finally(() => {
+      setLoading(true)
     })
   }
 
@@ -47,7 +54,7 @@ function productDetails() {
     <>
       {/* inner_news */}
 
-      <div className="inner_blog inner_news">
+      {loading && !id ? (<PageSkelton title={data.attributes?.Title} />) : (<div className="inner_blog inner_news">
 
 
         <BtnBack backLink="newsmedia_section" />
@@ -56,7 +63,7 @@ function productDetails() {
         <div className="mobile_blog_image d-block d-lg-none">
           <div className="card_img">
             <div className="img_parent">
-              <img src={`${bublic_url}${data.attributes?.Image.data[0].attributes.formats.large?.url}`} alt="" />
+              <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
             </div>
           </div>
         </div>
@@ -87,14 +94,16 @@ function productDetails() {
               <div className="inner_blog_img">
                 <div className="card_img">
                   <div className="img_parent">
-                    <img src={`${bublic_url}${data.attributes?.Image.data[0].attributes.formats.large?.url}`} alt="" />
+                    <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </div>)}
+
+
 
     </>
   );

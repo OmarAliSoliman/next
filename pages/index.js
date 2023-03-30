@@ -14,21 +14,38 @@ import HomeNews from '../components/HomeNews';
 import HomeStrip from '../components/HomeStrip';
 import HomeContactUs from '../components/HomeContactUs';
 import FixedImg from '../components/FixedImg';
+import { home_api } from '../components/API';
 
 function Home() {
 
+  const [data, setData] = useState({});
+
   useEffect(()=>{
     document.title = "Home"
+
+    retreveData();
+
   }, [])
+
+
+  const retreveData = async() =>{
+    await axios.get(`${home_api}/?populate=*`).then((res)=>{
+      if(res.status == 200){
+        setData(res.data.data)
+      }
+    }).catch((er)=>{
+      console.error(er)
+    })
+  }
 
   return (
     <>
 
-      <FixedImg />
+      <FixedImg data={data} />
 
-      <Header />
+      <Header data={data}/>
 
-      <HomeAbout />
+      <HomeAbout data={data} />
 
       <HomeProuduct />
 
@@ -37,9 +54,9 @@ function Home() {
 
       <HomeNews />
 
-      <HomeStrip />
+      <HomeStrip data={data} />
 
-      <HomeContactUs />
+      <HomeContactUs data={data} />
 
     </>
   )

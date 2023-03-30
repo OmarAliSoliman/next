@@ -2,7 +2,7 @@ import Link from 'next/link';
 import React from 'react'
 import { bublic_url } from './API';
 
-function SmallNewsCard({item}) {
+function SmallNewsCard({ item }) {
   // const { link, img, title, slag, data, innerimg } = props;
   return (
     <>
@@ -10,7 +10,7 @@ function SmallNewsCard({item}) {
         <div className="new_newsMedia_card">
           <div className="card_img">
             <div className="img_parent">
-              <img src={`${bublic_url}${item.attributes?.Image.data[0].attributes?.formats?.medium?.url}`} alt="" />
+              <img src={`${bublic_url}${item.attributes?.card_image?.data?.attributes?.url}`} alt="" />
             </div>
           </div>
           <div className="card_body">
@@ -20,10 +20,10 @@ function SmallNewsCard({item}) {
             </div>
             <div className="card_text">
               <p className='render_html' dangerouslySetInnerHTML={{ __html: item.attributes.Description }} />
-               
+
             </div>
             <div className="read_more">
-              <Link href={{ pathname: `/newsdetails/${item.id}`, query: { title: item.attributes.Title} }} className="text-f-2 text-w-500">Read more</Link>
+              <Link href={{ pathname: `/newsdetails/${item.id}`, query: { title: item.attributes.Title } }} className="text-f-2 text-w-500">Read more</Link>
             </div>
           </div>
         </div>
