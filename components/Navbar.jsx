@@ -15,8 +15,7 @@ function Navbar(props) {
           <div className="wrapper">
             <div className="logo">
               <Link href="/">
-                {/* <img src={`/images/newlogo.svg`} alt="" /> */}
-                <Image src={`/images/newlogo.svg`} width="120" height="70" alt="" />
+                <img src={`/images/newlogo.svg`} alt="" />
               </Link>
             </div>
             <div className=" burger_menue">

@@ -54,10 +54,7 @@ function Layout({ children }) {
 
       </Head>
 
-      {
-        loading ? <Loading /> : null
-      }
-
+    
       <SideNav closeSidebar={closeSidebar} />
 
       <Navbar openSidebar={openSidebar} />
