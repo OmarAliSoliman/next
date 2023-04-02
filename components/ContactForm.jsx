@@ -1,14 +1,16 @@
 import React, { useState, useRef } from "react";
 import SimpleReactValidator from "simple-react-validator";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { contactus_api } from "./API";
 
 function ContactForm() {
   const simpleValidator = useRef(new SimpleReactValidator());
   const [, forceUpdate] = useState();
   const [inputs, setInputs] = useState({
-    name: "",
-    email: "",
-    phone: "",
+    Name: "",
+    Email: "",
+    PhoneNumber: "",
     message: "",
   });
 
@@ -19,7 +21,13 @@ function ContactForm() {
   const sendForm = (e) => {
     e.preventDefault();
     if (simpleValidator.current.allValid()) {
-      toast.success(`message was send successfully`, {position: toast.POSITION.TOP_CENTER})
+
+      axios.post(`${contactus_api}`, {data:inputs}).then((res)=>{
+        if(res.status === 200){
+          console.log(res)
+          toast.success(`message was send successfully`, {position: toast.POSITION.TOP_CENTER})
+        }
+      })
     } else {
       simpleValidator.current.showMessages();
       forceUpdate(1);
@@ -38,13 +46,13 @@ function ContactForm() {
             type="text"
             className="form-control"
             onChange={onchangeInput}
-            name="name"
-            value={inputs.name}
+            name="Name"
+            value={inputs.Name}
             placeholder="Name"
-            onBlur={() => simpleValidator.current.showMessageFor("name")}
+            onBlur={() => simpleValidator.current.showMessageFor("Name")}
           />
           <div className="error">
-            {simpleValidator.current.message("name", inputs.name, "required")}
+            {simpleValidator.current.message("Name", inputs.Name, "required")}
           </div>
         </div>
         <div className="form-group">
@@ -52,13 +60,13 @@ function ContactForm() {
             type="text"
             className="form-control"
             onChange={onchangeInput}
-            name="email"
-            value={inputs.email}
+            name="Email"
+            value={inputs.Email}
             placeholder="Email Address"
-            onBlur={() => simpleValidator.current.showMessageFor("email")}
+            onBlur={() => simpleValidator.current.showMessageFor("Email")}
           />
           <div className="error">
-            {simpleValidator.current.message("email", inputs.email, "required")}
+            {simpleValidator.current.message("Email", inputs.Email, "required")}
           </div>
         </div>
         <div className="form-group">
@@ -66,13 +74,13 @@ function ContactForm() {
             type="text"
             className="form-control"
             onChange={onchangeInput}
-            name="phone"
-            value={inputs.phone}
+            name="PhoneNumber"
+            value={inputs.PhoneNumber}
             placeholder="Phone Number"
-            onBlur={() => simpleValidator.current.showMessageFor("phone")}
+            onBlur={() => simpleValidator.current.showMessageFor("PhoneNumber")}
           />
           <div className="error">
-            {simpleValidator.current.message("phone", inputs.phone, "required")}
+            {simpleValidator.current.message("PhoneNumber", inputs.PhoneNumber, "required")}
           </div>
         </div>
         <div className="form-group">

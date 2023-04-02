@@ -11,6 +11,7 @@ import {
   MarkerClusterer
 } from "@react-google-maps/api";
 import axios from "axios";
+import { bublic_url, location_points } from "./API";
 
 const containerStyle = {
   width: "100%",
@@ -49,17 +50,6 @@ const exampleMapStyles = [
     stylers: [{ visibility: "off" }],
   },
 ];
-
-// const bridge_icon = { url: '/images/bridge.svg', scaledSize: { width: 32, height: 32 } };
-
-
-// let iconMarker = new window.google.maps.MarkerImage(
-//   "/images/bridge.svg",
-//   null, /* size is determined at runtime */
-//   null, /* origin is 0,0 */
-//   null, /* anchor is bottom center of the scaled image */
-//   new window.google.maps.Size(32, 32)
-// );
 
 
 var json1 = {
@@ -1731,7 +1721,6 @@ var json1 = {
   ]
 };
 
-const bridgePoints = json1.points.filter((point) => point.type === "bridge")
 const bridgePointsclusterStyles = [
   {
     textColor: 'black',
@@ -1740,7 +1729,6 @@ const bridgePointsclusterStyles = [
     width: 50,
   },
 ];
-const hoardingsPoints = json1.points.filter((point) => point.type === "hoardings")
 const hoardingsPointsclusterStyles = [
   {
     textColor: 'black',
@@ -1749,8 +1737,17 @@ const hoardingsPointsclusterStyles = [
     width: 50,
   },
 ];
-const lamppostsPoints = json1.points.filter((point) => point.type === "lampposts")
 const lamppostsPointsclusterStyles = [
+  {
+    textColor: 'black',
+    url: '/images/lampposts_icon.svg',
+    height: 50,
+    width: 50,
+  },
+];
+
+
+const digitalbridgePointssclusterStyles = [
   {
     textColor: 'black',
     url: '/images/lampposts_icon.svg',
@@ -1761,6 +1758,61 @@ const lamppostsPointsclusterStyles = [
 
 function Map() {
   const [activeMarker, setActiveMarker] = useState(null);
+
+  // get data
+  const [points, setPoints] = useState([]);
+
+  // points type
+  const [bridgePoints, setBridgePoints] = useState([]);
+  const [hoardingsPoints, setHoardingsPoints] = useState([]);
+  const [lamppostsPoints, setLamppostsPoints] = useState([]);
+  const [digitalbridgePoints, setDigitalbridgePoints] = useState([]);
+
+  useEffect(() => {
+    retreveData();
+  }, [])
+
+
+  const retreveData = () => {
+    axios.get(`${location_points}`).then((res) => {
+      if (res.status === 200) {
+        console.log(res.data.data[0].attributes.our_location_icon.data.attributes.Title);
+
+        const bridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Bridge")
+        bridgePoints.map((item) => {
+          item.attributes.latitude = parseFloat(item.attributes.latitude);
+          console.log(item.attributes.latitude)
+        })
+        setBridgePoints(bridgePoints);
+
+
+        const hoardingsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "hoardings")
+        bridgePoints.map((item) => {
+          item.attributes.latitude = parseFloat(item.attributes.latitude);
+          console.log(item.attributes.latitude)
+        })
+        setHoardingsPoints(hoardingsPoints);
+
+
+        const lamppostsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "lampposts")
+        console.log(lamppostsPoints.length)
+        bridgePoints.map((item) => {
+          item.attributes.latitude = parseFloat(item.attributes.latitude);
+          console.log(item.attributes.latitude)
+        })
+        setLamppostsPoints(lamppostsPoints);
+
+        const digitalbridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge")
+        console.log(lamppostsPoints.length)
+        bridgePoints.map((item) => {
+          item.attributes.latitude = parseFloat(item.attributes.latitude);
+          console.log(item.attributes.latitude)
+        })
+        setDigitalbridgePoints(digitalbridgePoints);
+
+      }
+    })
+  }
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -1788,7 +1840,7 @@ function Map() {
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-            
+
             zoom={12.4}
             options={{
               styles: exampleMapStyles,
@@ -1810,20 +1862,20 @@ function Map() {
                   bridgePoints.map((point) => (
                     <>
                       <Marker
-                        key={point.lat}
-                        position={{ lat: point.lat, lng: point.lng }}
+                        key={parseFloat(point.attributes.latitude)}
+                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
                         icon={{
-                          url: point.icon,
+                          url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(point.lng)}
+                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
                         clusterer={clusterer}
                       />
-                      {activeMarker === point.lng ? (
-                        <InfoWindow position={{ lat: point.lat, lng: point.lng }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker === parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
                           <>
-                            <div>{point.title}</div>
-                            <p> {point.phone} </p>
+                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
@@ -1849,20 +1901,20 @@ function Map() {
                   hoardingsPoints.map((point) => (
                     <>
                       <Marker
-                        key={point.lat}
-                        position={{ lat: point.lat, lng: point.lng }}
+                        key={parseFloat(point.attributes.latitude)}
+                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
                         icon={{
-                          url: point.icon,
+                          url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(point.lng)}
+                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
                         clusterer={clusterer}
                       />
-                      {activeMarker === point.lng ? (
-                        <InfoWindow position={{ lat: point.lat, lng: point.lng }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker === parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
                           <>
-                            <div>{point.title}</div>
-                            <p> {point.phone} </p>
+                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
@@ -1889,20 +1941,20 @@ function Map() {
                   lamppostsPoints.map((point) => (
                     <>
                       <Marker
-                        key={point.lat}
-                        position={{ lat: point.lat, lng: point.lng }}
+                        key={parseFloat(point.attributes.latitude)}
+                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
                         icon={{
-                          url: point.icon,
+                          url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(point.lng)}
+                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
                         clusterer={clusterer}
                       />
-                      {activeMarker === point.lng ? (
-                        <InfoWindow position={{ lat: point.lat, lng: point.lng }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker === parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
                           <>
-                            <div>{point.title}</div>
-                            <p> {point.phone} </p>
+                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
@@ -1911,6 +1963,45 @@ function Map() {
                 }
               </MarkerClusterer>
             )}
+
+            {digitalbridgePoints.length > 0 && (
+              <MarkerClusterer
+                gridSize={50}
+                averageCenter
+                enableRetinaIcons
+                maxZoom={20}
+                zoomOnClick
+                options={{
+                  styles: digitalbridgePointssclusterStyles
+                }}
+              >
+                {(clusterer) =>
+                  digitalbridgePoints.map((point) => (
+                    <>
+                      <Marker
+                        key={parseFloat(point.attributes.latitude)}
+                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        icon={{
+                          url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
+                          scaledSize: new window.google.maps.Size(32, 32),
+                        }}
+                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        clusterer={clusterer}
+                      />
+                      {activeMarker === parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                          <>
+                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            {/* <p> {point.phone} </p> */}
+                          </>
+                        </InfoWindow>
+                      ) : null}
+                    </>
+                  ))
+                }
+              </MarkerClusterer>
+            )}
+
 
 
           </GoogleMap>
