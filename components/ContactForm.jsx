@@ -3,9 +3,11 @@ import SimpleReactValidator from "simple-react-validator";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { contactus_api } from "./API";
+import SpinnerLoading from "./SpinnerLoading";
 
 function ContactForm() {
   const simpleValidator = useRef(new SimpleReactValidator());
+  const [loading, setLoading] = useState(false)
   const [, forceUpdate] = useState();
   const [inputs, setInputs] = useState({
     Name: "",
@@ -19,19 +21,22 @@ function ContactForm() {
   };
 
   const sendForm = (e) => {
+    setLoading(true)
     e.preventDefault();
     if (simpleValidator.current.allValid()) {
 
-      axios.post(`${contactus_api}`, {data:inputs}).then((res)=>{
-        if(res.status === 200){
+      axios.post(`${contactus_api}`, { data: inputs }).then((res) => {
+        if (res.status === 200) {
           console.log(res)
-          toast.success(`message was send successfully`, {position: toast.POSITION.TOP_CENTER})
+          toast.success(`message was send successfully`, { position: toast.POSITION.TOP_CENTER })
+          setLoading(false)
         }
       })
     } else {
       simpleValidator.current.showMessages();
       forceUpdate(1);
-      toast.error(`please check your information`, {position: toast.POSITION.TOP_CENTER})
+      toast.error(`please check your information`, { position: toast.POSITION.TOP_CENTER })
+      setLoading(false)
       // toast.error(`برجاء التاكد من البيانات`);
       // simpleValidator.current.autoForceUpdate();
       // setLoading(false);
@@ -101,9 +106,11 @@ function ContactForm() {
           </div>
         </div>
         <div className="btn_submit">
-          <button className="btn" type="submit">
-            Send
-          </button>
+          {loading ? (<SpinnerLoading />) : (
+            <button className="btn" type="submit">
+              Send
+            </button>
+          )}
         </div>
       </form>
     </>

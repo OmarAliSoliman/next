@@ -1163,6 +1163,11 @@ p {
         }
       }
     }
+    .error{
+      color: red;
+      font-size: .9rem;
+      margin-top: 8px;
+    }
   }
 }
 
@@ -1370,6 +1375,10 @@ p {
         color: #fff;
         font-size: .9rem;
       }
+    }
+    .error{
+      color: #fff;
+      margin-top: 5px;
     }
   }
 }

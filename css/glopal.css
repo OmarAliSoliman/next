@@ -1072,6 +1072,12 @@ p {
   color: #fff;
 }
 
+.contact_us .contact_us_form .error {
+  color: red;
+  font-size: .9rem;
+  margin-top: 8px;
+}
+
 /* inner_blog */
 .inner_blog {
   min-height: calc(100vh - 142px);
@@ -1274,6 +1280,11 @@ p {
   border-color: #424242;
   color: #fff;
   font-size: .9rem;
+}
+
+.footer .footer_form .error {
+  color: #fff;
+  margin-top: 5px;
 }
 
 /* copy_right */
