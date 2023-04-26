@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
-import { Scrollbar } from "react-scrollbars-custom";
+// import { Scrollbar } from "react-scrollbars-custom";
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import Placeholder from 'react-bootstrap/Placeholder';
 
 
@@ -28,11 +29,11 @@ function PageSkelton({title}) {
                   </h5>
                 </div>
                 <div class="inner_parg">
-                  <Scrollbar>
+                  <Scrollbars >
                     <p aria-hidden="true">
                       <Placeholder xs={6} />
                     </p>
-                  </Scrollbar>
+                  </Scrollbars>
                 </div>
               </div>
               <Link href="/#ourproduct_section" className="back_btn_arrow">

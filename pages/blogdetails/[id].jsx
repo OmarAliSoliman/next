@@ -1,8 +1,8 @@
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { Scrollbar } from "react-scrollbars-custom";
+import React, { useEffect, useState, useMemo } from "react";
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import { bublic_url, product_api } from "../../components/API";
 import BtnBack from "../../components/btnBack";
 import PageSkelton from "../../components/PageSkelton";
@@ -10,26 +10,23 @@ import PageSkelton from "../../components/PageSkelton";
 function productDetails() {
   const [data, setData] = useState({})
   const router = useRouter();
+  // const [id, setID] = useState(parseInt(router.query.id))
   const [loadin, setLoading] = useState(true);
   const title = router.query.title
   // type
   const id = parseInt(router.query.id);
+  const memozid = useMemo(() => {
+    return parseInt(router.query.id)
+  }, [id])
 
   useEffect(() => {
     document.title = title
     setLoading(true)
-    if (id) {
-      retreveData(id);
+    // setID(parseInt(router.query.id))
+    console.log(memozid)
+    if (memozid) {
+      retreveData(memozid);
     }
-
-    const script = document.createElement('script');
-    script.src = '/js/backbtn_script.js';
-    script.async = true;
-    document.head.appendChild(script);
-    return () => {
-      document.head.removeChild(script);
-    }
-
 
   }, [id, title])
 
@@ -54,7 +51,7 @@ function productDetails() {
       {loadin && !id ? (<PageSkelton title={data.attributes?.Title} />) : (
         <div class="inner_blog blog_page">
 
-          <BtnBack backLink="ourproduct_section" />
+          {/* <BtnBack backLink="ourproduct_section" /> */}
 
           <div class="mobile_blog_image d-block d-lg-none">
             <div class="card_img">
@@ -72,9 +69,14 @@ function productDetails() {
                     {/* <h6 class="col-lg-12">A new vision for a brighter future</h6> */}
                   </div>
                   <div class="inner_parg">
-                    <Scrollbar>
-                      <p dangerouslySetInnerHTML={{ __html: data.attributes?.Content }} />
-                    </Scrollbar>
+                    <Scrollbars style={{ width: 500, height: 300 }}>
+                      <p>{data.attributes?.Content}</p>
+                    </Scrollbars>
+                  </div>
+                  <div className="back_btn">
+                    <a href="/#ourproduct_section">
+                      <img src="/images/newarrowblack.svg" alt="" />
+                    </a>
                   </div>
                 </div>
                 <Link href="/#ourproduct_section" className="back_btn_arrow">

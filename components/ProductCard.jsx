@@ -3,7 +3,7 @@ import React from 'react'
 import { bublic_url } from './API';
 
 function ProductCard({ item }) {
-
+  
   return (
     <>
       <div className="slider_item">

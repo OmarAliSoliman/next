@@ -1756,6 +1756,16 @@ const digitalbridgePointssclusterStyles = [
   },
 ];
 
+
+const digitalbridgePointssNullclusterStyles = [
+  {
+    textColor: 'black',
+    url: '/images/default.svg',
+    height: 50,
+    width: 50,
+  },
+];
+
 function Map() {
   const [activeMarker, setActiveMarker] = useState(null);
 
@@ -1768,6 +1778,10 @@ function Map() {
   const [lamppostsPoints, setLamppostsPoints] = useState([]);
   const [digitalbridgePoints, setDigitalbridgePoints] = useState([]);
 
+  // --------------------------------------
+
+  const [bridgePointsNull, setBridgePointsNull] = useState([]);
+
   useEffect(() => {
     retreveData();
   }, [])
@@ -1776,39 +1790,51 @@ function Map() {
   const retreveData = () => {
     axios.get(`${location_points}`).then((res) => {
       if (res.status === 200) {
-        console.log(res.data.data[0].attributes.our_location_icon.data.attributes.Title);
+        res.data.data.map((item, index) => {
+          if (item.attributes.our_location_icon.data === null) {
+            bridgePointsNull.push(item)
+          } else {
+            if (item.attributes.our_location_icon.data.attributes.Title == "Bridge") {
+              bridgePoints.push(item);
+            }
+            if (item.attributes.our_location_icon.data.attributes.Title == "hoardings") {
+              hoardingsPoints.push(item);
+            }
+            if (item.attributes.our_location_icon.data.attributes.Title == "lampposts") {
+              lamppostsPoints.push(item);
+            }
+            if (item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge") {
+              digitalbridgePoints.push(item);
+            }
+            // const bridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Bridge")
+            // bridgePoints.map((item) => {
+            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
+            // })
+            // setBridgePoints(bridgePoints);
 
-        const bridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Bridge")
-        bridgePoints.map((item) => {
-          item.attributes.latitude = parseFloat(item.attributes.latitude);
-          console.log(item.attributes.latitude)
+
+            // const hoardingsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "hoardings")
+            // bridgePoints.map((item) => {
+            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
+            // })
+            // setHoardingsPoints(hoardingsPoints);
+
+
+            // const lamppostsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "lampposts")
+            // console.log(lamppostsPoints.length)
+            // bridgePoints.map((item) => {
+            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
+            // })
+            // setLamppostsPoints(lamppostsPoints);
+
+            // const digitalbridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge")
+            // console.log(lamppostsPoints.length)
+            // bridgePoints.map((item) => {
+            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
+            // })
+            // setDigitalbridgePoints(digitalbridgePoints);
+          }
         })
-        setBridgePoints(bridgePoints);
-
-
-        const hoardingsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "hoardings")
-        bridgePoints.map((item) => {
-          item.attributes.latitude = parseFloat(item.attributes.latitude);
-          console.log(item.attributes.latitude)
-        })
-        setHoardingsPoints(hoardingsPoints);
-
-
-        const lamppostsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "lampposts")
-        console.log(lamppostsPoints.length)
-        bridgePoints.map((item) => {
-          item.attributes.latitude = parseFloat(item.attributes.latitude);
-          console.log(item.attributes.latitude)
-        })
-        setLamppostsPoints(lamppostsPoints);
-
-        const digitalbridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge")
-        console.log(lamppostsPoints.length)
-        bridgePoints.map((item) => {
-          item.attributes.latitude = parseFloat(item.attributes.latitude);
-          console.log(item.attributes.latitude)
-        })
-        setDigitalbridgePoints(digitalbridgePoints);
 
       }
     })
@@ -1992,6 +2018,45 @@ function Map() {
                         <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
                           <>
                             <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            {/* <p> {point.phone} </p> */}
+                          </>
+                        </InfoWindow>
+                      ) : null}
+                    </>
+                  ))
+                }
+              </MarkerClusterer>
+            )}
+
+
+            {bridgePointsNull.length > 0 && (
+              <MarkerClusterer
+                gridSize={50}
+                averageCenter
+                enableRetinaIcons
+                maxZoom={20}
+                zoomOnClick
+                options={{
+                  styles: digitalbridgePointssNullclusterStyles
+                }}
+              >
+                {(clusterer) =>
+                  bridgePointsNull.map((point) => (
+                    <>
+                      <Marker
+                        key={parseFloat(point.attributes.latitude)}
+                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        icon={{
+                          url: `/images/default.svg`,
+                          scaledSize: new window.google.maps.Size(30, 30),
+                        }}
+                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        clusterer={clusterer}
+                      />
+                      {activeMarker === parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                          <>
+                            <div>title</div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
