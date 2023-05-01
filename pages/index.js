@@ -17,6 +17,7 @@ import FixedImg from '../components/FixedImg';
 import { home_api } from '../components/API';
 import Loading from '../components/Loading';
 
+
 function Home() {
 
   const [data, setData] = useState({});
@@ -37,14 +38,17 @@ function Home() {
       }
     }).catch((er) => {
       console.error(er)
-    }).finally(()=>{
+    }).finally(() => {
       setLoading(false)
     })
   }
 
   return (
     <>
-
+      <Head>
+        <title>Viola Outdoor - Home</title>
+        <meta property="og:title" content="Viola Outdoor" key="title" />
+      </Head>
       {
         loading ? <Loading /> : null
       }

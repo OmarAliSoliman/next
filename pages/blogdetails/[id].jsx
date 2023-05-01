@@ -1,107 +1,90 @@
 import axios from "axios";
+import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
-import React, { useEffect, useState, useMemo } from "react";
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { bublic_url, product_api } from "../../components/API";
-import BtnBack from "../../components/btnBack";
+import BtnBack from "../../components/BtnBack";
 import PageSkelton from "../../components/PageSkelton";
 
-function productDetails() {
-  const [data, setData] = useState({})
-  const router = useRouter();
-  // const [id, setID] = useState(parseInt(router.query.id))
-  const [loadin, setLoading] = useState(true);
-  const title = router.query.title
-  // type
-  const id = parseInt(router.query.id);
-  const memozid = useMemo(() => {
-    return parseInt(router.query.id)
-  }, [id])
-
-  useEffect(() => {
-    document.title = title
-    setLoading(true)
-    // setID(parseInt(router.query.id))
-    console.log(memozid)
-    if (memozid) {
-      retreveData(memozid);
-    }
-
-  }, [id, title])
-
-
-  const retreveData = async (id) => {
-    await axios.get(`${product_api}/${id}?populate=*`).then((res) => {
-      if (res.status == 200) {
-        setData(res.data.data);
-        console.log(res.data.data);
-      }
-    }).catch((er) => {
-      console.log(er)
-    }).finally(() => {
-      setLoading(true)
-    })
-  }
-
+function ProductDetails({ data, title }) {
   return (
     <>
+
+      <Head>
+        <title>{data.attributes?.Title}</title>
+        <meta name="description" content="Viola Outdoor" />
+        <meta name="og:title" property="og:title" content={data.attributes?.Title} />
+        <meta name="og:description" property="og:description" content="Viola Outdoor" />
+        <meta name="og:image" property="og:image" content={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} />
+        <meta name="og:image:type" property="og:image:type" content="image/jpeg" />
+        {/* <meta name="og:url" property="og:url" content={window.location.href} /> */}
+        {/* <meta name="og:site_name" property="og:site_name" content={window.location.href} /> */}
+        <meta name="og:type" property="og:type" content="article" />
+      </Head>
+
       {/* inner_news */}
-
-      {loadin && !id ? (<PageSkelton title={data.attributes?.Title} />) : (
-        <div class="inner_blog blog_page">
-
-          {/* <BtnBack backLink="ourproduct_section" /> */}
-
-          <div class="mobile_blog_image d-block d-lg-none">
-            <div class="card_img">
-              <div class="img_parent">
-                <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
-              </div>
+      <div className="inner_blog blog_page">
+        <div className="mobile_blog_image d-block d-lg-none">
+          <div className="card_img">
+            <div className="img_parent">
+              <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
             </div>
           </div>
-          <div class="container">
-            <div class="row">
-              <div class="col-sm-12 col-md-12 col-lg-6">
-                <div class="inner_blog_content">
-                  <div class="about_header">
-                    <h5 class="text-f-5 text-w-700 text-uppercase text-left text-black "> {data.attributes?.Title}</h5>
-                    {/* <h6 class="col-lg-12">A new vision for a brighter future</h6> */}
-                  </div>
-                  <div class="inner_parg">
-                    <Scrollbars style={{ width: 500, height: 300 }}>
-                      <p>{data.attributes?.Content}</p>
-                    </Scrollbars>
-                  </div>
-                  <div className="back_btn">
-                    <a href="/#ourproduct_section">
-                      <img src="/images/newarrowblack.svg" alt="" />
-                    </a>
-                  </div>
+        </div>
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12 col-md-12 col-lg-6">
+              <div className="inner_blog_content blog_inner_blog_content">
+                <div className="back_btn">
+                  <a href="/#ourproduct_section">
+                    <img src="/images/newarrowblack.svg" alt="" />
+                  </a>
                 </div>
-                <Link href="/#ourproduct_section" className="back_btn_arrow">
-                  <img src="/images/arrow-return.svg" alt="" />
-                </Link>
+                <div className="about_header">
+                  <h5 className="text-f-5 text-w-700 text-uppercase text-left text-black "> {data.attributes?.Title}</h5>
+                  {/* <h6 class="col-lg-12">A new vision for a brighter future</h6> */}
+                </div>
+                <div className="inner_parg">
+                  <p>{data.attributes?.Content}</p>
+                </div>
               </div>
-              <div class="col-sm-12 col-md-12 col-lg-6 d-none d-lg-block">
-                <div class="inner_blog_img">
-                  <div class="card_img">
-                    <div class="img_parent">
-                      <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
-                    </div>
+            </div>
+            <div className="col-sm-12 col-md-12 col-lg-6 d-none d-lg-block">
+              <div className="inner_blog_img">
+                <div className="card_img">
+                  <div className="img_parent">
+                    <img src={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} alt="" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      )}
-
-
+      </div>
     </>
   );
 }
 
-export default productDetails;
+export async function getServerSideProps(context) {
+  const { query } = context;
+  const id = parseInt(query.id);
+  const title = query.title;
 
+  try {
+    const response = await axios.get(`${product_api}/${id}?populate=*`);
+    const data = response.data.data;
+    return {
+      props: {
+        data,
+        title,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      notFound: true,
+    };
+  }
+}
 
+export default ProductDetails;

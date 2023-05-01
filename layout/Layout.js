@@ -42,6 +42,8 @@ function Layout({ children }) {
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
           crossorigin="anonymous"
         />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nprogress/0.2.0/nprogress.min.css" integrity="sha512-42kB9yDlYiCEfx2xVwq0q7hT4uf26FUgSIZBK8uiaEnTdShXjwr8Ip1V4xGJMg3mHkUt9nNuTDxunHF0/EgxLQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
         <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon" />
 
         <link rel="stylesheet" href="/css/all.min.css" />
@@ -49,12 +51,13 @@ function Layout({ children }) {
         <meta charset="UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        {/* <title>Home</title> */}
         <script src="/js/jquery-3.6.0.min.js"></script>
         <script src="/js/backbtn_script.js" ></script>
 
       </Head>
 
-    
+
       <SideNav closeSidebar={closeSidebar} />
 
       <Navbar openSidebar={openSidebar} />

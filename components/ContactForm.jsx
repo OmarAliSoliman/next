@@ -7,8 +7,9 @@ import SpinnerLoading from "./SpinnerLoading";
 
 function ContactForm() {
   const simpleValidator = useRef(new SimpleReactValidator());
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [, forceUpdate] = useState();
+  const [submitSuccess, setSubmitSuccess] = useState(false);
   const [inputs, setInputs] = useState({
     Name: "",
     Email: "",
@@ -20,23 +21,42 @@ function ContactForm() {
     setInputs({ ...inputs, [e.target.name]: e.target.value });
   };
 
-  const sendForm = (e) => {
-    setLoading(true)
-    e.preventDefault();
-    if (simpleValidator.current.allValid()) {
 
+  const blurMessages = (type) => {
+    simpleValidator.current.showMessageFor(type)
+    setSubmitSuccess(false);
+  }
+
+
+  const sendForm = (e) => {
+    setLoading(true);
+    e.preventDefault();
+    
+    if (simpleValidator.current.allValid()) {
+      console.log(inputs)
       axios.post(`${contactus_api}`, { data: inputs }).then((res) => {
         if (res.status === 200) {
-          console.log(res)
-          toast.success(`message was send successfully`, { position: toast.POSITION.TOP_CENTER })
-          setLoading(false)
+          console.log(res);
+          toast.success(`message was send successfully`, {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          setLoading(false);
+          inputs.Name="";
+          inputs.Email="";
+          inputs.PhoneNumber="";
+          inputs.message="";
+
+          setSubmitSuccess(true);
         }
-      })
+      });
     } else {
       simpleValidator.current.showMessages();
       forceUpdate(1);
-      toast.error(`please check your information`, { position: toast.POSITION.TOP_CENTER })
-      setLoading(false)
+      toast.error(`please check your information`, {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      setLoading(false);
+      setSubmitSuccess(false);
       // toast.error(`برجاء التاكد من البيانات`);
       // simpleValidator.current.autoForceUpdate();
       // setLoading(false);
@@ -54,11 +74,13 @@ function ContactForm() {
             name="Name"
             value={inputs.Name}
             placeholder="Name"
-            onBlur={() => simpleValidator.current.showMessageFor("Name")}
+            onBlur={()=>blurMessages("Name")}
           />
-          <div className="error">
-            {simpleValidator.current.message("Name", inputs.Name, "required")}
-          </div>
+          {!submitSuccess ? (
+            <div className="error">
+              {simpleValidator.current.message("Name", inputs.Name, "required")}
+            </div>
+          ) : null}
         </div>
         <div className="form-group">
           <input
@@ -68,11 +90,17 @@ function ContactForm() {
             name="Email"
             value={inputs.Email}
             placeholder="Email Address"
-            onBlur={() => simpleValidator.current.showMessageFor("Email")}
+            onBlur={()=>blurMessages("Email")}
           />
-          <div className="error">
-            {simpleValidator.current.message("Email", inputs.Email, "required")}
-          </div>
+          {!submitSuccess ? (
+            <div className="error">
+              {simpleValidator.current.message(
+                "Email",
+                inputs.Email,
+                "required"
+              )}
+            </div>
+          ) : null}
         </div>
         <div className="form-group">
           <input
@@ -82,11 +110,17 @@ function ContactForm() {
             name="PhoneNumber"
             value={inputs.PhoneNumber}
             placeholder="Phone Number"
-            onBlur={() => simpleValidator.current.showMessageFor("PhoneNumber")}
+            onBlur={()=>blurMessages("PhoneNumber")}
           />
-          <div className="error">
-            {simpleValidator.current.message("PhoneNumber", inputs.PhoneNumber, "required")}
-          </div>
+          {!submitSuccess ? (
+            <div className="error">
+              {simpleValidator.current.message(
+                "PhoneNumber",
+                inputs.PhoneNumber,
+                "required"
+              )}
+            </div>
+          ) : null}
         </div>
         <div className="form-group">
           <textarea
@@ -95,18 +129,22 @@ function ContactForm() {
             name="message"
             value={inputs.message}
             placeholder="write Your Message"
-            onBlur={() => simpleValidator.current.showMessageFor("message")}
+            onBlur={()=>blurMessages("message")}
           ></textarea>
-          <div className="error">
-            {simpleValidator.current.message(
-              "message",
-              inputs.message,
-              "required"
-            )}
-          </div>
+          {!submitSuccess ? (
+            <div className="error">
+              {simpleValidator.current.message(
+                "message",
+                inputs.message,
+                "required"
+              )}
+            </div>
+          ) : null}
         </div>
         <div className="btn_submit">
-          {loading ? (<SpinnerLoading />) : (
+          {loading ? (
+            <SpinnerLoading />
+          ) : (
             <button className="btn" type="submit">
               Send
             </button>
