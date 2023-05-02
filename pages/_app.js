@@ -10,6 +10,10 @@ import NProgress from 'nprogress';
 
 
 
+
+
+
+
 function MyApp({ Component, pageProps }) {
 
   Router.events.on('routeChangeStart', (url) => {
