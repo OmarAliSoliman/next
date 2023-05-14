@@ -8,7 +8,7 @@ import {
   Marker,
   MarkerF,
   InfoWindow,
-  MarkerClusterer
+  MarkerClusterer,
 } from "@react-google-maps/api";
 import axios from "axios";
 import { bublic_url, location_points } from "./API";
@@ -53,44 +53,42 @@ const exampleMapStyles = [
 
 const bridgePointsclusterStyles = [
   {
-    textColor: 'black',
-    url: '/images/bridge.svg',
+    textColor: "black",
+    url: "/images/bridge.svg",
     height: 50,
     width: 50,
   },
 ];
 const hoardingsPointsclusterStyles = [
   {
-    textColor: 'black',
-    url: '/images/hoardings_icon2.svg',
+    textColor: "black",
+    url: "/images/hoardings_icon2.svg",
     height: 50,
     width: 50,
   },
 ];
 const lamppostsPointsclusterStyles = [
   {
-    textColor: 'black',
-    url: '/images/lampposts_icon.svg',
+    textColor: "black",
+    url: "/images/lampposts_icon.svg",
     height: 50,
     width: 50,
   },
 ];
-
 
 const digitalbridgePointssclusterStyles = [
   {
-    textColor: 'black',
-    url: '/images/lampposts_icon.svg',
+    textColor: "black",
+    url: "/images/lampposts_icon.svg",
     height: 50,
     width: 50,
   },
 ];
 
-
 const digitalbridgePointssNullclusterStyles = [
   {
-    textColor: 'black',
-    url: '/images/default.svg',
+    textColor: "black",
+    url: "/images/default.svg",
     height: 50,
     width: 50,
   },
@@ -114,61 +112,49 @@ function Map() {
 
   useEffect(() => {
     retreveData();
-  }, [bridgePoints, hoardingsPoints, lamppostsPoints, digitalbridgePoints, bridgePointsNull])
-
+  }, []);
 
   const retreveData = () => {
     axios.get(`${location_points}`).then((res) => {
-      if (res.status === 200) {
-        res.data.data.map((item, index) => {
-          if (item.attributes.our_location_icon.data === null) {
-            bridgePointsNull.push(item)
-          } else {
-            if (item.attributes.our_location_icon.data.attributes.Title == "Bridge") {
-              bridgePoints.push(item);
-            }
-            if (item.attributes.our_location_icon.data.attributes.Title == "hoardings") {
-              hoardingsPoints.push(item);
-            }
-            if (item.attributes.our_location_icon.data.attributes.Title == "lampposts") {
-              lamppostsPoints.push(item);
-            }
-            if (item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge") {
-              digitalbridgePoints.push(item);
-            }
-            // const bridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Bridge")
-            // bridgePoints.map((item) => {
-            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
-            // })
-            // setBridgePoints(bridgePoints);
-
-
-            // const hoardingsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "hoardings")
-            // bridgePoints.map((item) => {
-            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
-            // })
-            // setHoardingsPoints(hoardingsPoints);
-
-
-            // const lamppostsPoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "lampposts")
-            // console.log(lamppostsPoints.length)
-            // bridgePoints.map((item) => {
-            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
-            // })
-            // setLamppostsPoints(lamppostsPoints);
-
-            // const digitalbridgePoints = res.data.data.filter((item) => item.attributes.our_location_icon.data.attributes.Title == "Digital Bridge")
-            // console.log(lamppostsPoints.length)
-            // bridgePoints.map((item) => {
-            //   item.attributes.latitude = parseFloat(item.attributes.latitude);
-            // })
-            // setDigitalbridgePoints(digitalbridgePoints);
+      // if (res.status === 200) {
+      res.data.data.map((item, index) => {
+        if (item.attributes.our_location_icon.data === null) {
+          // bridgePointsNull.push(item);
+          setBridgePointsNull([...bridgePointsNull, item]);
+        } else {
+          if (
+            item.attributes.our_location_icon.data.attributes.Title == "Bridge"
+          ) {
+            // bridgePoints.push(item);
+            setBridgePoints((prev)=>[...prev, item]);
+            // console.log("item")
           }
-        })
-
-      }
-    })
-  }
+          if (
+            item.attributes.our_location_icon.data.attributes.Title ==
+            "hoardings"
+          ) {
+            // hoardingsPoints.push(item);
+            setHoardingsPoints((prev)=>[...prev, item]);
+          }
+          if (
+            item.attributes.our_location_icon.data.attributes.Title ==
+            "lampposts"
+          ) {
+            // lamppostsPoints.push(item);
+            setLamppostsPoints((prev)=>[...prev, item]);
+          }
+          if (
+            item.attributes.our_location_icon.data.attributes.Title ==
+            "Digital Bridge"
+          ) {
+            // digitalbridgePoints.push(item);
+            setDigitalbridgePoints((prev)=>[...prev, item]);
+          }
+        }
+      });
+      // }
+    });
+  };
 
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
@@ -176,7 +162,7 @@ function Map() {
   });
 
   const handleMarkerClick = (item) => {
-    console.log(item)
+    console.log(item);
     if (item === activeMarker) {
       return;
     }
@@ -196,11 +182,10 @@ function Map() {
           <GoogleMap
             mapContainerStyle={containerStyle}
             center={center}
-
             zoom={12.4}
             options={{
               styles: exampleMapStyles,
-              streetViewControl: false
+              streetViewControl: false,
             }}
           >
             {bridgePoints.length > 0 && (
@@ -211,36 +196,55 @@ function Map() {
                 zoomOnClick
                 maxZoom={20}
                 options={{
-                  styles: bridgePointsclusterStyles
+                  styles: bridgePointsclusterStyles,
                 }}
               >
                 {(clusterer) =>
-                  bridgePoints.map((point) => (
-                    <>
+                  bridgePoints.map((point, index) => (
+                    <React.Fragment key={index}>
                       <Marker
                         key={parseFloat(point.attributes.latitude)}
-                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        position={{
+                          lat: parseFloat(point.attributes.latitude),
+                          lng: parseFloat(point.attributes.longitude),
+                        }}
                         icon={{
                           url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        onClick={() =>
+                          handleMarkerClick(
+                            parseFloat(point.attributes.longitude)
+                          )
+                        }
                         clusterer={clusterer}
                       />
-                      {activeMarker === parseFloat(point.attributes.longitude) ? (
-                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker ===
+                      parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow
+                          position={{
+                            lat: parseFloat(point.attributes.latitude),
+                            lng: parseFloat(point.attributes.longitude),
+                          }}
+                          anchor={activeMarker}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
                           <>
-                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            <div>
+                              {
+                                point.attributes.our_location_icon.data
+                                  .attributes.Title
+                              }
+                            </div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   ))
                 }
               </MarkerClusterer>
             )}
-
 
             {hoardingsPoints.length > 0 && (
               <MarkerClusterer
@@ -250,37 +254,55 @@ function Map() {
                 maxZoom={20}
                 zoomOnClick
                 options={{
-                  styles: hoardingsPointsclusterStyles
+                  styles: hoardingsPointsclusterStyles,
                 }}
               >
                 {(clusterer) =>
-                  hoardingsPoints.map((point) => (
-                    <>
+                  hoardingsPoints.map((point, index) => (
+                    <React.Fragment key={index}>
                       <Marker
-                        key={parseFloat(point.attributes.latitude)}
-                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        
+                        position={{
+                          lat: parseFloat(point.attributes.latitude),
+                          lng: parseFloat(point.attributes.longitude),
+                        }}
                         icon={{
                           url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        onClick={() =>
+                          handleMarkerClick(
+                            parseFloat(point.attributes.longitude)
+                          )
+                        }
                         clusterer={clusterer}
                       />
-                      {activeMarker === parseFloat(point.attributes.longitude) ? (
-                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker ===
+                      parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow
+                          position={{
+                            lat: parseFloat(point.attributes.latitude),
+                            lng: parseFloat(point.attributes.longitude),
+                          }}
+                          anchor={activeMarker}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
                           <>
-                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            <div>
+                              {
+                                point.attributes.our_location_icon.data
+                                  .attributes.Title
+                              }
+                            </div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   ))
                 }
               </MarkerClusterer>
             )}
-
-
 
             {lamppostsPoints.length > 0 && (
               <MarkerClusterer
@@ -290,31 +312,51 @@ function Map() {
                 maxZoom={20}
                 zoomOnClick
                 options={{
-                  styles: lamppostsPointsclusterStyles
+                  styles: lamppostsPointsclusterStyles,
                 }}
               >
                 {(clusterer) =>
-                  lamppostsPoints.map((point) => (
-                    <>
+                  lamppostsPoints.map((point, index) => (
+                    <React.Fragment key={index}>
                       <Marker
-                        key={parseFloat(point.attributes.latitude)}
-                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        
+                        position={{
+                          lat: parseFloat(point.attributes.latitude),
+                          lng: parseFloat(point.attributes.longitude),
+                        }}
                         icon={{
                           url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        onClick={() =>
+                          handleMarkerClick(
+                            parseFloat(point.attributes.longitude)
+                          )
+                        }
                         clusterer={clusterer}
                       />
-                      {activeMarker === parseFloat(point.attributes.longitude) ? (
-                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker ===
+                      parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow
+                          position={{
+                            lat: parseFloat(point.attributes.latitude),
+                            lng: parseFloat(point.attributes.longitude),
+                          }}
+                          anchor={activeMarker}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
                           <>
-                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            <div>
+                              {
+                                point.attributes.our_location_icon.data
+                                  .attributes.Title
+                              }
+                            </div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   ))
                 }
               </MarkerClusterer>
@@ -328,36 +370,55 @@ function Map() {
                 maxZoom={20}
                 zoomOnClick
                 options={{
-                  styles: digitalbridgePointssclusterStyles
+                  styles: digitalbridgePointssclusterStyles,
                 }}
               >
                 {(clusterer) =>
-                  digitalbridgePoints.map((point) => (
-                    <>
+                  digitalbridgePoints.map((point, index) => (
+                    <React.Fragment key={index}>
                       <Marker
-                        key={parseFloat(point.attributes.latitude)}
-                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        
+                        position={{
+                          lat: parseFloat(point.attributes.latitude),
+                          lng: parseFloat(point.attributes.longitude),
+                        }}
                         icon={{
                           url: `${bublic_url}${point.attributes.our_location_icon.data.attributes.Icon.data.attributes.url}`,
                           scaledSize: new window.google.maps.Size(32, 32),
                         }}
-                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        onClick={() =>
+                          handleMarkerClick(
+                            parseFloat(point.attributes.longitude)
+                          )
+                        }
                         clusterer={clusterer}
                       />
-                      {activeMarker === parseFloat(point.attributes.longitude) ? (
-                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker ===
+                      parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow
+                          position={{
+                            lat: parseFloat(point.attributes.latitude),
+                            lng: parseFloat(point.attributes.longitude),
+                          }}
+                          anchor={activeMarker}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
                           <>
-                            <div>{point.attributes.our_location_icon.data.attributes.Title}</div>
+                            <div>
+                              {
+                                point.attributes.our_location_icon.data
+                                  .attributes.Title
+                              }
+                            </div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   ))
                 }
               </MarkerClusterer>
             )}
-
 
             {bridgePointsNull.length > 0 && (
               <MarkerClusterer
@@ -367,45 +428,56 @@ function Map() {
                 maxZoom={20}
                 zoomOnClick
                 options={{
-                  styles: digitalbridgePointssNullclusterStyles
+                  styles: digitalbridgePointssNullclusterStyles,
                 }}
               >
                 {(clusterer) =>
-                  bridgePointsNull.map((point) => (
-                    <>
+                  bridgePointsNull.map((point, index) => (
+                    <React.Fragment key={index}>
                       <Marker
-                        key={parseFloat(point.attributes.latitude)}
-                        position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }}
+                        
+                        position={{
+                          lat: parseFloat(point.attributes.latitude),
+                          lng: parseFloat(point.attributes.longitude),
+                        }}
                         icon={{
                           url: `/images/default.svg`,
                           scaledSize: new window.google.maps.Size(30, 30),
                         }}
-                        onClick={() => handleMarkerClick(parseFloat(point.attributes.longitude))}
+                        onClick={() =>
+                          handleMarkerClick(
+                            parseFloat(point.attributes.longitude)
+                          )
+                        }
                         clusterer={clusterer}
                       />
-                      {activeMarker === parseFloat(point.attributes.longitude) ? (
-                        <InfoWindow position={{ lat: parseFloat(point.attributes.latitude), lng: parseFloat(point.attributes.longitude) }} anchor={activeMarker} onCloseClick={() => setActiveMarker(null)}>
+                      {activeMarker ===
+                      parseFloat(point.attributes.longitude) ? (
+                        <InfoWindow
+                          position={{
+                            lat: parseFloat(point.attributes.latitude),
+                            lng: parseFloat(point.attributes.longitude),
+                          }}
+                          anchor={activeMarker}
+                          onCloseClick={() => setActiveMarker(null)}
+                        >
                           <>
                             <div>title</div>
                             {/* <p> {point.phone} </p> */}
                           </>
                         </InfoWindow>
                       ) : null}
-                    </>
+                    </React.Fragment>
                   ))
                 }
               </MarkerClusterer>
             )}
-
-
-
           </GoogleMap>
 
           <div class="img_info">
             <img src="/images/infomap_1.svg" alt="" />
           </div>
         </div>
-
       </div>
     </div>
   ) : (
