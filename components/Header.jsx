@@ -7,7 +7,7 @@ function Header({ data }) {
     <>
 
       <Head>
-        <title>{data.attributes?.AboutUsRightSide}</title>
+        <title>Viola Outdoor</title>
         <meta name="description" content="Viola Outdoor" />
         <meta name="og:title" property="og:title" content={data.attributes?.AboutUsRightSide} />
         <meta name="og:description" property="og:description" content={data.attributes?.AboutUsRightSide} />
