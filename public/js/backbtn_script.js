@@ -106,10 +106,10 @@ $(document).ready(function () {
 
 
 	$(window).keydown(function (e) {
-		console.log(e.keyCode);
+		// console.log(e.keyCode);
 		if (e.keyCode === 34) {
 
-			console.log('page down');
+			// console.log('page down');
 
 			e.preventDefault();
 			//e.stopPropagation;
@@ -118,10 +118,10 @@ $(document).ready(function () {
 		}
 	});
 
-	console.log("hi");
+	// console.log("hi");
 	$(window).on('load hashchange', function () {
-		console.log("hi");
-		console.log(window.location.hash);
+		// console.log("hi");
+		// console.log(window.location.hash);
 		var topValue = 102;
 		if ($(window).width() <= 1600) {
 			topValue = 55;
@@ -135,7 +135,7 @@ $(document).ready(function () {
 		})
 		if (window.location.hash) {
 			var target = window.location.hash;
-			console.log($(target).offset().top);
+			// console.log($(target).offset().top);
 			var scrollTo = $(target).offset().top - topValue;
 			$('body, html').animate({ scrollTop: scrollTo + 'px' }, 100);
 		}

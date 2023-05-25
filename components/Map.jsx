@@ -162,7 +162,7 @@ function Map() {
   });
 
   const handleMarkerClick = (item) => {
-    console.log(item);
+    // console.log(item);
     if (item === activeMarker) {
       return;
     }

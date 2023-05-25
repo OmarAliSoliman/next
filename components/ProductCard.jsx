@@ -7,7 +7,7 @@ function ProductCard({ item }) {
   return (
     <>
       <div className="slider_item">
-        <Link href={{ pathname: `/blogdetails/${item.id}`, query: { title: item.attributes?.Title } }} className="product_card">
+        <Link href={{ pathname: `/product/${item.attributes.Slug}` }} className="product_card">
           <div className="card_img">
             <div className="img_parent">
               <img src={`${bublic_url}${item.attributes?.card_image?.data?.attributes?.url}`} alt="" />

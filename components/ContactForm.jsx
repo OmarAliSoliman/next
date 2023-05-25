@@ -33,10 +33,10 @@ function ContactForm() {
     e.preventDefault();
     
     if (simpleValidator.current.allValid()) {
-      console.log(inputs)
+      // console.log(inputs)
       axios.post(`${contactus_api}`, { data: inputs }).then((res) => {
         if (res.status === 200) {
-          console.log(res);
+          // console.log(res);
           toast.success(`message was send successfully`, {
             position: toast.POSITION.TOP_CENTER,
           });

@@ -39,7 +39,7 @@ function SubscribeForm() {
 
       axios.post(`${newsletter_api}`, { data: { "email": email } }).then((res) => {
         if (res.status === 200) {
-          console.log(res)
+          // console.log(res)
           toast.success(`message was send successfully`, { position: toast.POSITION.TOP_CENTER })
           setLoding(false)
           simpleValidator.current.hideMessages();
@@ -47,7 +47,7 @@ function SubscribeForm() {
           setSubmitSuccess(true);
         }
       }).catch((er) => {
-        console.log(er.response)
+        // console.log(er.response)
       }).finally(() => {
         setLoding(false)
         simpleValidator.current.hideMessages();

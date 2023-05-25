@@ -23,7 +23,7 @@ function SmallNewsCard({ item }) {
 
             </div>
             <div className="read_more">
-              <Link href={{ pathname: `/newsdetails/${item.id}`, query: { title: item.attributes.Title } }} className="text-f-2 text-w-500">Read more</Link>
+              <Link href={{ pathname: `/news/${item.attributes.Slug}`}}  className="text-f-2 text-w-500">Read more</Link>
             </div>
           </div>
         </div>

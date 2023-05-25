@@ -7,13 +7,6 @@ import { Router } from 'next/router';
 import Head from 'next/head';
 import NProgress from 'nprogress';
 
-
-
-
-
-
-
-
 function MyApp({ Component, pageProps }) {
 
   Router.events.on('routeChangeStart', (url) => {
