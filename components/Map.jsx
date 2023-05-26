@@ -475,7 +475,7 @@ function Map() {
           </GoogleMap>
 
           <div class="img_info">
-            <img src="/images/infomap_1.svg" alt="" />
+            <img src="/images/infomap_3.svg" alt="" />
           </div>
         </div>
       </div>

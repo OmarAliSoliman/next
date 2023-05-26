@@ -1,5 +1,5 @@
 import axios from "axios";
-import Head from 'next/head';
+import Head from "next/head";
 import { bublic_url, news_api } from "../../components/API";
 import PageSkelton from "../../components/PageSkelton";
 
@@ -10,11 +10,13 @@ export default function NewsDetails({ data, title }) {
       <Head>
         <title>{data.attributes?.Slug}</title>
         <meta name="description" content="Viola Outdoor" />
-        <meta name="og:title" property="og:title" content={data.attributes?.Slug} />
-        <meta name="og:description" property="og:description" content={data.attributes?.Content} />
-        <meta name="og:image" property="og:image" content={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`} />
-        <meta name="og:image:type" property="og:image:type" content="image/jpeg" />
-        <meta name="og:type" property="og:type" content="article" />
+        <meta property="og:title" content={data.attributes?.Slug} />
+        <meta property="og:description" content={data.attributes?.Content} />
+        <meta
+          property="og:image"
+          content={`${bublic_url}${data.attributes?.inner_image?.data?.attributes?.url}`}
+        />
+        <meta property="og:type" content="article" />
       </Head>
       {!data ? (
         <PageSkelton title={data.attributes?.Title} />
@@ -74,16 +76,18 @@ export async function getServerSideProps(context) {
   const title = params.slug;
   var data = [];
   try {
-    const response = await axios.get(`${news_api}/?populate=*&filters[Slug]=${title}`);
-    if(response.data.data[0].length === 0){
+    const response = await axios.get(
+      `${news_api}/?populate=*&filters[Slug]=${title}`
+    );
+    if (response.data.data[0].length === 0) {
       data = [];
-    }else{
-     data = response.data.data[0];
+    } else {
+      data = response.data.data[0];
     }
     return {
       props: {
         data,
-        title
+        title,
       },
     };
   } catch (error) {

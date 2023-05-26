@@ -1,58 +1,60 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
-import { news_api } from './API';
-import NewsCard from './NewsCard'
-import SmallNewsCard from './SmallNewsCard'
-
+import { news_api } from "./API";
+import NewsCard from "./NewsCard";
+import SmallNewsCard from "./SmallNewsCard";
 
 const HomeNews = () => {
-
   const [news, setNews] = useState([]);
 
   useEffect(() => {
     retreveData();
-  }, [])
-
+  }, []);
 
   const retreveData = async () => {
     await axios.get(`${news_api}?populate=*`).then((res) => {
-      if (res.status == 200) {
-        setNews(res.data.data)
+      if (res.status === 200) {
+        const sortedNews = res.data.data.sort((a, b) => {
+          const dateA = new Date(a.attributes.Date);
+          const dateB = new Date(b.attributes.Date);
+          return dateB - dateA; // Sort in descending order
+        });
+        setNews(sortedNews);
       }
-    })
-
-  }
+    });
+  };
 
   const slider = React.useRef(null);
+  const slidesToShow = news.length < 4 ? news.length : 4;
 
   var settings = {
-    slidesToShow: 4,
+    slidesToShow: slidesToShow,
     arrows: false,
     infinite: false,
+    initialSlide: 0,
     responsive: [
       {
-        breakpoint: 1300,
+        breakpoint: 1400,
         settings: {
-          slidesToShow: 3
-        }
+          slidesToShow: 3,
+        },
       },
       {
         breakpoint: 1200,
         settings: {
-          slidesToShow: 2
-        }
+          slidesToShow: 2,
+        },
       },
       {
         breakpoint: 600,
         settings: {
           slidesToShow: 1,
           infinite: true,
-          
-        }
-      }
-    ]
-  }
+        },
+      },
+    ],
+  };
 
   return (
     <>
@@ -61,34 +63,40 @@ const HomeNews = () => {
       <div className="news_media" id="newsmedia_section">
         <div className="container">
           <div className="about_header">
-            <h5 className="text-f-9 text-w-700 text-uppercase text-center text-white"> News & Insights</h5>
+            <h5 className="text-f-9 text-w-700 text-uppercase text-center text-white">
+              {" "}
+              News & Insights
+            </h5>
           </div>
           <div className="blogs_wrapper">
             <div className="blogs_wrapper_slider">
-
-              <Slider ref={slider} {...settings}>
-
-                {news.map((item) => (
-                  <div className="slider_item" key={item.id}>
-                    <SmallNewsCard item={item} />
-                  </div>
-                ))}
-
-
-              </Slider>
-
-
+              {news.length !== 0 ? (
+                <Slider ref={slider} {...settings}>
+                  {news.map((item) => (
+                    <SmallNewsCard item={item} key={item.id} />
+                  ))}
+                </Slider>
+              ) : null}
             </div>
             <div className="custom_arrow">
               <ul className="list-unstyled">
-                <li className="prev" onClick={() => slider?.current?.slickPrev()}><img src="/images/newarrow.svg" alt="" /></li>
-                <li className="next" onClick={() => slider?.current?.slickNext()}><img src="/images/newarrow-right.svg" alt="" /></li>
+                <li
+                  className="prev"
+                  onClick={() => slider?.current?.slickPrev()}
+                >
+                  <img src="/images/newarrow.svg" alt="" />
+                </li>
+                <li
+                  className="next"
+                  onClick={() => slider?.current?.slickNext()}
+                >
+                  <img src="/images/newarrow-right.svg" alt="" />
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-
 
       {/* <div className="news_media" id="newsmedia_section">
         <div className="container-fluid">
@@ -117,7 +125,7 @@ const HomeNews = () => {
         </div>
       </div> */}
     </>
-  )
-}
+  );
+};
 
-export default HomeNews
+export default HomeNews;

@@ -4,6 +4,9 @@ import { bublic_url } from './API';
 
 function SmallNewsCard({ item }) {
   // const { link, img, title, slag, data, innerimg } = props;
+
+  const newsdate = item.attributes.Date
+  const date = `${new Date(newsdate).toLocaleDateString('en-US', { day: 'numeric' })} ${new Date(newsdate).toLocaleDateString('en-US', { month: 'short' })} ${new Date(newsdate).toLocaleDateString('en-US', { year: 'numeric' })}`
   return (
     <>
       <div className="slider_item">
@@ -14,7 +17,7 @@ function SmallNewsCard({ item }) {
             </div>
           </div>
           <div className="card_body">
-            <div className="card_date"><span className="text-w-100">Nov, 09, 2022 </span></div>
+            <div className="card_date"><span className="text-w-100">{date}</span></div>
             <div className="card_title">
               <h5 className="text-w-500">{item.attributes.Title}</h5>
             </div>

@@ -23,15 +23,24 @@ function HomeProuduct() {
 
   }
 
-
   const slider = React.useRef(null);
+  const slidesToShow = products.length < 4 ? products.length : 4;
+
+  const checkNmber=()=>{
+    if(products.length > 4){
+      return true
+    }else{
+      return false
+    }
+  }
 
   var settings = {
     centerMode: true,
-    slidesToShow: 2.35,
+    slidesToShow: products.length < 4 ? products.length : 2.35,
     arrows: false,
-    infinite: true,
+    infinite: checkNmber(),
     autoplay: true,
+    initialSlide: 0,
     autoplaySpeed: 2000,
     // prevArrow: <SamplePrevArrow />,
     // nextArrow: <SampleNextArrow />,
@@ -69,11 +78,13 @@ function HomeProuduct() {
           </div>
         </div>
         <div className="our_product_slider">
-          <Slider ref={slider} {...settings}>
-            {products.map((item)=>(
-              <ProductCard item={item} key={item.id} />
-            ))}
-          </Slider>
+          {products.length !== 0 ? (
+            <Slider ref={slider} {...settings}>
+              {products.map((item) => (
+                <ProductCard item={item} key={item.id} />
+              ))}
+            </Slider>
+          ) : null}
         </div>
         <div className="custom_arrow">
           <ul className="list-unstyled">

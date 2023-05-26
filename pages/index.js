@@ -18,16 +18,16 @@ function Home({ data }) {
   return (
     <>
       <Head>
-        <title>{data.attributes?.AboutUSLeftSide}</title>
+        <title>viola Outdoor</title>
         <meta name="description" content="Viola Outdoor" />
-        <meta property="og:title" content={data.attributes?.AboutUsRightSide} />
+        <meta property="og:title" content="Viola Outdoor" />
         <meta
           property="og:description"
-          content={data.attributes?.AboutUsRightSide}
+          content={data.attributes?.AboutUSLeftSide}
         />
         <meta
           property="og:image"
-          content={`${bublic_url}${data.attributes?.contactus_image?.data?.attributes.url}`}
+          content="/images/logo.png"
         />
         <meta property="og:type" content="article" />
       </Head>
