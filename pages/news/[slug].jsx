@@ -8,7 +8,7 @@ export default function NewsDetails({ data, title }) {
     <>
       {/* inner_news */}
       <Head>
-        <title>{data.attributes?.Slug}</title>
+        <title>{`Viola Outdoor - ${data.attributes?.Title}`}</title>
         <meta name="description" content="Viola Outdoor" />
         <meta property="og:title" content={data.attributes?.Slug} />
         <meta property="og:description" content={data.attributes?.Content} />

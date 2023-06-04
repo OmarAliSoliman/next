@@ -15,6 +15,9 @@ function SideNav(props) {
                   <a href="/#aboutus_section" onClick={closeSidebar}>about us</a>
                 </li>
                 <li>
+                  <Link href="/firefly" onClick={closeSidebar}>Firefly</Link>
+                </li>
+                <li>
                   <a href="/#ourproduct_section" onClick={closeSidebar}>Our Products</a>
                 </li>
                 <li>

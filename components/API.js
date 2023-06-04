@@ -7,3 +7,6 @@ export const bublic_url = "https://api.voutdoor.ae/";
 export const bublicimage_url = "https://voutdoor.ae/";
 export const contactus_api = 'https://api.voutdoor.ae/api/contact-uses';
 export const newsletter_api = "https://api.voutdoor.ae/api/newsletters";
+export const fireflyapi = "https://api.voutdoor.ae/api/firefly?populate=*";
+export const fireflycontactapi = "https://api.voutdoor.ae/api/firefly-contact-uses";
+export const fireflyopions = "https://api.voutdoor.ae/api/fireflyoptions?populate=*";

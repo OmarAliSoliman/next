@@ -9,26 +9,26 @@ import Placeholder from 'react-bootstrap/Placeholder';
 function PageSkelton({title}) {
   return (
     <>
-      <div class="inner_blog blog_page innerpage-skelton">
-        <div class="mobile_blog_image d-block d-lg-none">
-          <div class="card_img">
-            <div class="img_parent">
+      <div className="inner_blog blog_page innerpage-skelton">
+        <div className="mobile_blog_image d-block d-lg-none">
+          <div className="card_img">
+            <div className="img_parent">
               <Placeholder as={title} animation="glow">
                 <Placeholder xs={6} />
               </Placeholder>
             </div>
           </div>
         </div>
-        <div class="container">
-          <div class="row">
-            <div class="col-sm-12 col-md-12 col-lg-6">
-              <div class="inner_blog_content">
-                <div class="about_header">
+        <div className="container">
+          <div className="row">
+            <div className="col-sm-12 col-md-12 col-lg-6">
+              <div className="inner_blog_content">
+                <div className="about_header">
                   <h5 aria-hidden="true">
                     <Placeholder xs={6} />
                   </h5>
                 </div>
-                <div class="inner_parg">
+                <div className="inner_parg">
                   <Scrollbars >
                     <p aria-hidden="true">
                       <Placeholder xs={6} />
@@ -40,10 +40,10 @@ function PageSkelton({title}) {
                 <img src="/images/arrow-return.svg" alt="" />
               </Link>
             </div>
-            <div class="col-sm-12 col-md-12 col-lg-6 d-none d-lg-block">
-              <div class="inner_blog_img">
-                <div class="card_img">
-                  <div class="img_parent">
+            <div className="col-sm-12 col-md-12 col-lg-6 d-none d-lg-block">
+              <div className="inner_blog_img">
+                <div className="card_img">
+                  <div className="img_parent">
                     <Placeholder as={title} animation="glow">
                       <Placeholder xs={6} />
                     </Placeholder>

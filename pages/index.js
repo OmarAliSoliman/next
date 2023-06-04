@@ -27,7 +27,7 @@ function Home({ data }) {
         />
         <meta
           property="og:image"
-          content="/images/logo.png"
+          content="https://api.voutdoor.ae/uploads/logo_5b70fb53d4.svg"
         />
         <meta property="og:type" content="article" />
       </Head>
