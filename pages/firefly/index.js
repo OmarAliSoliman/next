@@ -23,7 +23,7 @@ function Firefly({ data }) {
         />
         <meta
           property="og:image"
-          content="/images/firefly/fireflyimg.webp"
+          content={`${bublic_url}${data.attributes.FirstSectionBackground.data.attributes.url}`}
         />
         <meta property="og:type" content="article" />
       </Head>
